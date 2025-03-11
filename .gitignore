@@ -72,3 +72,8 @@ testResults/
 .vs
 /.vs
 bin
+`
+
+.github/
+obj/
+/posgres/db
