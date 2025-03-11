@@ -77,3 +77,4 @@ bin
 .github/
 obj/
 /posgres/db
+/Services/Catalog/Catalog.API/obj/Catalog.API.csproj.nuget.dgspec.json
