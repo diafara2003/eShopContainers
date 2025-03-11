@@ -5,14 +5,16 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aad98c8e-9ccc-49f5-8f69-5d61da742043</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>       
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Carter" Version="9.0.0" />
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
     <PackageReference Include="Mapster" Version="7.4.2-pre02" />
     <PackageReference Include="Marten" Version="7.38.1" />
     <PackageReference Include="MediatR" Version="12.4.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+ 
   </ItemGroup>
 
   <ItemGroup>

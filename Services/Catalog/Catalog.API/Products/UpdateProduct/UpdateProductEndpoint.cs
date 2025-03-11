@@ -11,6 +11,8 @@ public class UpdateProductEndpoint : ICarterModule
         string ImageFile,
         decimal Price
     );
+
+
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPut("/products", async (UpdateProductRequest request, ISender sender) =>

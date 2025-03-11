@@ -1,5 +1,8 @@
 ﻿
 
+using BuildingBlocks.Exceptions;
+using MediatR;
+
 namespace Catalog.API.Products.UpdateProduct;
 
 public record UpdateProductCommand(
@@ -14,17 +17,28 @@ public record UpdateProductCommand(
 
 public record UpdateProductResult(bool IsSuccess);
 
+public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
+{
+    public UpdateProductCommandValidator()
+    {
+        RuleFor(c => c.Id).NotEmpty().WithMessage("Id is required");
+        RuleFor(c => c.Name).NotEmpty().Length(2, 100).WithMessage("Name must be between 2 and 100 characters");
+
+        RuleFor(c => c.Price).GreaterThan(0).WithMessage("Price must be greater than 0");
+    }
+}
+
+
 internal class UpdateProductHandler
-    (IDocumentSession session, ILogger<UpdateProductHandler> Logger)
+    (IDocumentSession session )
     : ICommandHandler<UpdateProductCommand, UpdateProductResult>
 {
     public async Task<UpdateProductResult> Handle(UpdateProductCommand command, CancellationToken cancellationToken)
     {
-        Logger.LogInformation("UpdateProductHandler {@query}", command);
         var product = await session.LoadAsync<Product>(command.Id, cancellationToken);
 
-        if(product is null)
-            throw new ProductNotFoundException();
+        if (product is null)
+            throw new NotFoundException("Product", command.Id);
 
         product.Name = command.Name;
         product.Description = command.Description;
@@ -39,5 +53,5 @@ internal class UpdateProductHandler
         return new UpdateProductResult(true);
     }
 
-  
+
 }

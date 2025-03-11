@@ -1,6 +1,4 @@
-﻿
-
-namespace Catalog.API.Products.CreateProduct;
+﻿namespace Catalog.API.Products.CreateProduct;
 
 public record CreateProductCommand(
     string Name,
@@ -9,15 +7,29 @@ public record CreateProductCommand(
     string ImageFile,
     decimal Price
     )
-    : ICommand<CreatePrpoductResult>;
+    : ICommand<CreateProductResult>;
 
-public record CreatePrpoductResult(Guid Id);
+public record CreateProductResult(Guid Id);
 
-internal class CreateProductCommandHandler(IDocumentSession session)
-    : ICommandHandler<CreateProductCommand, CreatePrpoductResult>
+public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
 {
-    public async Task<CreatePrpoductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
+    public CreateProductCommandValidator()
     {
+        RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
+        RuleFor(x => x.Description).NotEmpty().WithMessage("Descripcion is required");
+        RuleFor(x => x.Category).NotEmpty();
+        RuleFor(x => x.ImageFile).NotEmpty();
+        RuleFor(x => x.Price).GreaterThan(0).WithMessage("Price ");
+    }
+}
+
+internal class CreateProductCommandHandler
+    (IDocumentSession session)
+    : ICommandHandler<CreateProductCommand, CreateProductResult>
+{
+    public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
+    {
+
         //business logic create product
         //save to database
         //return result
@@ -33,7 +45,7 @@ internal class CreateProductCommandHandler(IDocumentSession session)
         session.Store(product);
         await session.SaveChangesAsync(cancellationToken);
 
-        return new CreatePrpoductResult(product.Id);
+        return new CreateProductResult(product.Id);
     }
 }
 
