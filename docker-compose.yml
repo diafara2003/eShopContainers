@@ -16,28 +16,27 @@ services:
   pgadmin:
     depends_on:
       - catalog-db
-    container_name: pgadmin
+    container_name: ${PG_DB_NAME}
     image: dpage/pgadmin4
     ports:
       - "5174:80"
     volumes:
       - ./pgadmin:/var/lib/pgadminv 
     environment:
-      - PGADMIN_DEFAULT_PASSWORD=pgadmin
-      - PGADMIN_DEFAULT_EMAIL=jau@google.com
+      PGADMIN_DEFAULT_PASSWORD: ${PG_PASSWORD}
+      PGADMIN_DEFAULT_EMAIL: ${PG_USERNAME}
+    restart: always
   
   mongo-db:
-    container_name: mongoDB
-    image: mongo:latest
+    container_name: ${MONGO_DB_NAME}
+    image: mongo
     environment:
-      MONGO_INITDB_ROOT_USERNAME: auditoria
-      MONGO_INITDB_ROOT_PASSWORD: 123456
-    ports:
-      - "27017:27017"
-    volumes:
-      - ./mongo/db:/data/db
-      - ./mongo/config:/data/configdb
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    # ports:
+    #   - "27017:27017"
     restart: always
+    command: ['--auth']    
 
   mongo-express:
     depends_on:
@@ -45,12 +44,12 @@ services:
     image: mongo-express
     restart: always
     ports:
-      - 8081:8081
+      - 8081:8081    
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: auditoria
-      ME_CONFIG_MONGODB_ADMINPASSWORD: 123456
-      ME_CONFIG_MONGODB_URL: mongodb://auditoria:123456@mongo:27017/
-      ME_CONFIG_BASICAUTH: false
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}      
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
+      ME_CONFIG_MONGODB_SERVER: ${MONGO_DB_NAME}
+     # ME_CONFIG_MONGODB_URL: mongodb:// ${MONGO_USERNAME:${MONGO_PASSWORD}@${MONGO_DB_NAME}:27017/
 
 # volumes:
 #    postgres_catalog:

@@ -1,3 +1,4 @@
+using Catalog.API.Data;
 using Catalog.API.Products.CreateProduct;
 using Catalog.API.Products.DeleteProduct;
 using Catalog.API.Products.GetProductByCategory;
@@ -36,6 +37,11 @@ builder.Services.AddMarten(options =>
     options.Connection(builder.Configuration.GetConnectionString("DataBase")!);    
     //options.AutoCreateSchemaObjects = AutoCreate.All;
 }).UseLightweightSessions();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.InitializeMartenWith<CatalogInitialData>();
+}
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
