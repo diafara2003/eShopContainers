@@ -5,6 +5,7 @@ using Catalog.API.Products.GetProductByCategory;
 using Catalog.API.Products.GetProductById;
 using Catalog.API.Products.GetProducts;
 using Catalog.API.Products.UpdateProduct;
+using HealthChecks.UI.Client;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,6 +45,9 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+string cnn = builder.Configuration.GetConnectionString("DataBase")!;
+builder.Services.AddHealthChecks()
+    .AddNpgSql(cnn);
 
 var app = builder.Build();
 
@@ -52,6 +56,12 @@ app.MapCarter();
 app.UseExceptionHandler(options =>
 {
 
+});
+
+app.UseHealthChecks("/health",new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+
+    ResponseWriter=UIResponseWriter.WriteHealthCheckUIResponse
 });
 
 app.Run();
