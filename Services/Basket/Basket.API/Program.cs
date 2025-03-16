@@ -3,6 +3,7 @@
 using BuildingBlocks.Behaviors;
 using BuildingBlocks.Exceptions;
 using HealthChecks.UI.Client;
+using JasperFx;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -27,7 +28,7 @@ builder.Services.AddMarten(options =>
 {
     options.Connection(cnn);
     options.Schema.For<ShoppingCartRoot>().Identity(x => x.UserName);
-    //options.AutoCreateSchemaObjects = AutoCreate.All;
+    options.AutoCreateSchemaObjects = AutoCreate.All;
 }).UseLightweightSessions();
 
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();

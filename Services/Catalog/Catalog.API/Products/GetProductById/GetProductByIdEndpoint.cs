@@ -11,7 +11,7 @@ public class GetProductByIdEndpoint : ICarterModule
         {
             var result = await sender.Send(new GetProductByIdQuery(id));
             var response = result.Adapt<GetProducByIdResponse>();
-            return Results.Ok(response.Product);
+            return Results.Ok(result.Troduct);
         }).WithName("GetProductById")
         .Produces<Product>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)

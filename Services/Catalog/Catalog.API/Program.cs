@@ -6,6 +6,7 @@ using Catalog.API.Products.GetProductById;
 using Catalog.API.Products.GetProducts;
 using Catalog.API.Products.UpdateProduct;
 using HealthChecks.UI.Client;
+using Weasel.Core;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,13 +31,13 @@ builder.Services.AddMediatR(config =>
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
     config.AddOpenBehavior(typeof(LogginBehavior<,>));
 });
-
+string cnn = builder.Configuration.GetConnectionString("DataBase")!;
 builder.Services.AddValidatorsFromAssembly(assembly);
 
 builder.Services.AddMarten(options =>
 {
-    options.Connection(builder.Configuration.GetConnectionString("DataBase")!);    
-    //options.AutoCreateSchemaObjects = AutoCreate.All;
+    options.Connection(cnn);    
+    options.AutoCreateSchemaObjects = AutoCreate.All;
 }).UseLightweightSessions();
 
 if (builder.Environment.IsDevelopment())
@@ -45,7 +46,7 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
-string cnn = builder.Configuration.GetConnectionString("DataBase")!;
+
 builder.Services.AddHealthChecks()
     .AddNpgSql(cnn);
 
