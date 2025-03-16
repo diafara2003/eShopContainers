@@ -13,7 +13,7 @@ public class GetBasketEndpoint : ICarterModule
 
             var response = result.Adapt<GetBasketResponse>();   
 
-            Results.Ok(result);
+         return   Results.Ok(result);
         }).WithName("GetBasket")
         .Produces<GetBasketResponse>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)

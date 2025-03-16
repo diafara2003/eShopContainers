@@ -1,60 +1,97 @@
+
+
 services:
 
-
   catalog-db:
-    container_name: catalog-db    
-    image: postgres:latest   
+    container_name: catalog-db
+    image: postgres:latest
     environment:
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: CatalogDB
     restart: always
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
-      - ./posgres/db:/var/lib/postgresql/data
+      - ./posgres/catalog-db:/var/lib/postgresql/data
 
-  catalog.api:
-    container_name: catalog.api
-    depends_on:
-      - catalog-db
-    # image: ${DOCKER_REGISTRY-}catalog.api
+  basket-db:
+    container_name: basket-db
+    image: postgres:latest
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ADPNETCORE_HTTPS_PORT=8080
-      - ASPNETCORE_HTTP_PORT=8081
-      - ConnectionStrings__DataBase=Server=catalog-db;Port=5432;Database=CatalogDB;User Id=postgres;Password=postgres;Include Error Detail=true;
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: BasketDB
+    restart: always
     ports:
-      - "6000:8080"
-      - "6060:8081"
-    build:
-      context: .
-      dockerfile: Services/Catalog/Catalog.API/Dockerfile    
+      - "5433:5432"
+    volumes:
+      - ./posgres/basket-db:/var/lib/postgresql/data
 
   pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
     depends_on:
       - catalog-db
-    container_name: ${PG_DB_NAME}
-    image: dpage/pgadmin4
+      - basket-db
     ports:
       - "5174:80"
     volumes:
-      - ./pgadmin:/var/lib/pgadminv 
+      - ./pgadmin:/var/lib/pgadmin
     environment:
-      PGADMIN_DEFAULT_PASSWORD: ${PG_PASSWORD}
       PGADMIN_DEFAULT_EMAIL: ${PG_USERNAME}
+      PGADMIN_DEFAULT_PASSWORD: ${PG_PASSWORD}
     restart: always
-  
+
+  redis_basket:
+    container_name: redis_basket
+    image: redis
+    ports:
+      - "6379:6379"
+    restart: always
+
+  catalog-api:
+    container_name: catalog-api
+    depends_on:
+       - catalog-db
+    build:
+      context: .
+      dockerfile: services/catalog/catalog.api/dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=development
+      - ADPNETCORE_HTTPS_PORT=8080
+      - ASPNETCORE_HTTP_PORT=8081
+      - ConnectionStrings__DataBase=server=catalog-db;port=5432;database=catalogdb;user id=postgres;password=postgres;include error detail=true;
+    ports:
+      - "6000:8080"
+      - "6060:8081"
+
+  basket-api:
+    container_name: basket-api
+    depends_on:
+      - basket-db
+      - redis_basket
+    build:
+      context: .
+      dockerfile: Services/Basket/Basket.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=development
+      - ADPNETCORE_HTTPS_PORT=8080
+      - ASPNETCORE_HTTP_PORT=8081
+      - ConnectionStrings__DataBase=Server=basket-db;Port=5432;Database=BasketDB;User Id=postgres;Password=postgres;Include Error Detail=true;      
+      - ConnectionStrings__Redis=redis_basket:6379
+    ports:
+      - "6001:8080"
+      - "6061:8081"
+
   mongo-db:
     container_name: ${MONGO_DB_NAME}
     image: mongo
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
-    # ports:
-    #   - "27017:27017"
     restart: always
-    command: ['--auth']    
+    command: ['--auth']
 
   mongo-express:
     depends_on:
@@ -62,15 +99,14 @@ services:
     image: mongo-express
     restart: always
     ports:
-      - 8081:8081    
+      - "8081:8081"
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}      
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
       ME_CONFIG_MONGODB_SERVER: ${MONGO_DB_NAME}
-     # ME_CONFIG_MONGODB_URL: mongodb:// ${MONGO_USERNAME:${MONGO_PASSWORD}@${MONGO_DB_NAME}:27017/
-
-# volumes:
-#    postgres_catalog:
-#    external: false
 
 
+
+volumes:
+  postgres_catalog:
+  postgres_basket:

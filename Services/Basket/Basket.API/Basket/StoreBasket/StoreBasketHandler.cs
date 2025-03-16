@@ -14,17 +14,19 @@ public class StoreBasketValidator:AbstractValidator<StoreBasketCommand>
     }
 }
 
-public class StoreBasketCommandHandler
+public class StoreBasketCommandHandler(IBasketRepository respository)
     : ICommandHandler<StoreBasketCommand, StoreBasketResult>
 {
     public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
     {
         ShoppingCartRoot cart = command.Cart;
 
+        var response =await respository.StoreBasket(cart,cancellationToken);
+
         //store basket in database
 
         //update cache redis
 
-        return new StoreBasketResult("jau");
+        return new StoreBasketResult(command.Cart.UserName);
     }
 }
