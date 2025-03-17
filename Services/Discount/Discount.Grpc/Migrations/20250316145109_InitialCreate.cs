@@ -24,6 +24,12 @@ namespace Discount.Grpc.Migrations
                 {
                     table.PrimaryKey("PK_Coupons", x => x.Id);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Coupons",
+                columns: new[] { "Id", "ProductName", "Description", "Amount" },
+                values: new object[] { 1, "IPhone X", "IPhone Discount", 150 });
+            
         }
 
         /// <inheritdoc />
