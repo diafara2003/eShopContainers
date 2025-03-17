@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using static Discount.Grpc.DiscountProtoService;
+﻿using static Discount.Grpc.DiscountProtoService;
 
 namespace Basket.API.Basket.StoreBasket;
 

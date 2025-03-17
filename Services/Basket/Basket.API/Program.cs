@@ -2,9 +2,11 @@
 
 using BuildingBlocks.Behaviors;
 using BuildingBlocks.Exceptions;
+using Discount.Grpc;
 using HealthChecks.UI.Client;
 using JasperFx;
 using Microsoft.Extensions.DependencyInjection;
+using static Discount.Grpc.DiscountProtoService;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,6 +40,12 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = redisCnn;
     //options.InstanceName = "Basket";
+});
+
+//grpc Services
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(options =>
+{
+    options.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
 });
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
