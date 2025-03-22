@@ -11,25 +11,25 @@ public static class OrderListDto
         foreach (var item in order)
         {
             var orderDto = new OrderDTO(
-               Id: item.Id, CustomerId: item.customerId, orderName: item.OrderName,
+               Id: item.Id, CustomerId: item.customerId, OrderName: item.OrderName,
                ShippingAddress: new AddressDTO(
                    item.ShippingAddress.FirstName,
                    item.ShippingAddress.LastName,
                    item.ShippingAddress.EmailAddress ?? "",
                    item.ShippingAddress.Country),
-                 BllingAddress: new AddressDTO(
+                 BillingAddress: new AddressDTO(
                       item.BillingAddress.FirstName,
                       item.BillingAddress.LastName,
                       item.BillingAddress.EmailAddress ?? "",
                       item.BillingAddress.Country),
                     Payment: new PaymentDTO(
                         item.Payment.CardNumber,
-                        item.Payment.CardHolderName,
+                        item.Payment.CardName,
                         item.Payment.Expiration,
                         item.Payment.Cvv),
                     Status: item.Status,
                     OrderItems: item.OrderItems
-                    .Select(i => new OrderItemDTO(productId: i.ProductId,
+                    .Select(i => new OrderItemDTO(ProductId: i.ProductId,
                     OrderId: i.Id,
                     price: i.Price,
                     quantity: i.Quantity

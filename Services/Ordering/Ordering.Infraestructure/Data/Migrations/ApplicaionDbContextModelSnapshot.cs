@@ -110,7 +110,7 @@ namespace Ordering.Infraestructure.Data.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<string>("CardHolderName")
+                            b1.Property<string>("CardName")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
@@ -149,14 +149,13 @@ namespace Ordering.Infraestructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("customerId");
-
                     b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("Ordering.Domain.Models.OrderItem", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -222,7 +221,7 @@ namespace Ordering.Infraestructure.Data.Migrations
 
             modelBuilder.Entity("Ordering.Domain.ValueObjects.Payment", b =>
                 {
-                    b.Property<string>("CardHolderName")
+                    b.Property<string>("CardName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -241,23 +240,8 @@ namespace Ordering.Infraestructure.Data.Migrations
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("Ordering.Domain.Models.Order", b =>
-                {
-                    b.HasOne("Ordering.Domain.Models.Customer", null)
-                        .WithMany()
-                        .HasForeignKey("customerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Ordering.Domain.Models.OrderItem", b =>
                 {
-                    b.HasOne("Ordering.Domain.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Ordering.Domain.Models.Order", null)
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId");

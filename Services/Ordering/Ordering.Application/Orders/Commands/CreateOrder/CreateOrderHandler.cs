@@ -13,20 +13,28 @@ public class CreateOrderHandler(IApplicacionDbContext dbContext) : ICommandHandl
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
+
+        var idOrden = order.Id;
+
+        foreach (var item in order.OrderItems)
+        {
+            dbContext.OrderItems.Add(item );
+        }
+        await dbContext.SaveChangesAsync(cancellationToken);
         return new CreateOrderResult(order.Id);
     }
 
     private Order CreateNewOrder(OrderDTO orderDTO)
     {
         var shippingAddress = Address.Of(orderDTO.ShippingAddress.FirstName, orderDTO.ShippingAddress.LastName, orderDTO.ShippingAddress.EmailAddress, orderDTO.ShippingAddress.Country);
-        var billingAddress = Address.Of(orderDTO.BllingAddress.FirstName, orderDTO.BllingAddress.LastName, orderDTO.BllingAddress.EmailAddress, orderDTO.BllingAddress.Country);
+        var billingAddress = Address.Of(orderDTO.BillingAddress.FirstName, orderDTO.BillingAddress.LastName, orderDTO.BillingAddress.EmailAddress, orderDTO.BillingAddress.Country);
 
-        var newOrder = Order.Create(Guid.NewGuid(), orderDTO.CustomerId, orderDTO.orderName, shippingAddress, billingAddress,
-            Payment.Of(orderDTO.Payment.CardNumber, orderDTO.Payment.CardHolderName, orderDTO.Payment.Expiration, orderDTO.Payment.Cvv));
+        var newOrder = Order.Create(Guid.NewGuid(), orderDTO.CustomerId, orderDTO.OrderName, shippingAddress, billingAddress,
+            Payment.Of(orderDTO.Payment.CardNumber, orderDTO.Payment.CardName, orderDTO.Payment.Expiration, orderDTO.Payment.Cvv));
 
         foreach (var item in orderDTO.OrderItems)
         {
-            newOrder.Add(item.productId, item.price, item.quantity);
+            newOrder.Add(item.ProductId, item.price, item.quantity);
         }
 
         return newOrder;

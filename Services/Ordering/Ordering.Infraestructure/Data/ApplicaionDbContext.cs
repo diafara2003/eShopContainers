@@ -13,6 +13,7 @@ public class ApplicaionDbContext : DbContext, IApplicacionDbContext
     {
 
     }
+    //add-migration InitialState -OutputDir Data/Migrations -Project Ordering.Infraestructure -StartupProject Ordering.API
 
     public DbSet<Customer> Customers =>Set<Customer>();
     public DbSet<Product> Products => Set<Product>();

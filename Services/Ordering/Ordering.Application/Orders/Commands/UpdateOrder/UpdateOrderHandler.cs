@@ -27,9 +27,9 @@ class UpdateOrderHandler(IApplicacionDbContext dbContext) :
     private void UpdateOrderWithNewValues(Order order,OrderDTO orderDto)
     {
         var updateShippingAddress = Address.Of(orderDto.ShippingAddress.FirstName, orderDto.ShippingAddress.LastName, orderDto.ShippingAddress.EmailAddress, orderDto.ShippingAddress.Country);
-        var updateBillingAddress = Address.Of(orderDto.BllingAddress.FirstName, orderDto.BllingAddress.LastName, orderDto.BllingAddress.EmailAddress, orderDto.BllingAddress.Country);
-        var updatePayment = Payment.Of(orderDto.Payment.CardNumber, orderDto.Payment.CardHolderName, orderDto.Payment.Expiration, orderDto.Payment.Cvv);
+        var updateBillingAddress = Address.Of(orderDto.BillingAddress.FirstName, orderDto.BillingAddress.LastName, orderDto.BillingAddress.EmailAddress, orderDto.BillingAddress.Country);
+        var updatePayment = Payment.Of(orderDto.Payment.CardNumber, orderDto.Payment.CardName, orderDto.Payment.Expiration, orderDto.Payment.Cvv);
 
-        order.Update(order.Id, orderDto.CustomerId, orderDto.orderName, updateShippingAddress, updateBillingAddress, updatePayment, orderDto.Status);
+        order.Update(order.Id, orderDto.CustomerId, orderDto.OrderName, updateShippingAddress, updateBillingAddress, updatePayment, orderDto.Status);
     }
 }
