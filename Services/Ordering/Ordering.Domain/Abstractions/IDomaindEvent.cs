@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Ordering.Domain.Abstractions;
 
-public interface IDomaindEvent:INotification
+public interface IDomaindEvent : INotification
 {
     Guid EventId => Guid.NewGuid();
     public DateTime OccurredOn => DateTime.UtcNow;

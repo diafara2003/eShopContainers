@@ -2,7 +2,7 @@
 
 namespace Ordering.Domain.Events
 {
-   public record OrderUpdatedDomainEvent(Order order) 
+   public record OrderUpdatedEvent(Order order) 
         : IDomaindEvent; 
       
 }

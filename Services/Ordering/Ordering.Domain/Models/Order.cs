@@ -35,7 +35,7 @@ public class Order : Aggregate<Guid>
             BillingAddress = billingAddress,
             Payment = payment
         };
-        order.AddDomainEvent(new OrderCreatedDomainEvent(order));
+        order.AddDomainEvent(new OrderCreatedEvent(order));
 
        // order._orderItems.AddRange(orderItems);
         return order;
@@ -51,25 +51,25 @@ public class Order : Aggregate<Guid>
         Status = Status;
 
 
-        AddDomainEvent(new OrderUpdatedDomainEvent(this));
+        AddDomainEvent(new OrderUpdatedEvent(this));
     }
 
-    public void Add (Guid productId, Guid productID, decimal price, int quantity)
+    public void Add (Guid productId, decimal price, int quantity)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(quantity);
 
-        OrderItem orderItem = new OrderItem(productId, productID, price, quantity);
+        OrderItem orderItem = new OrderItem(productId,  price, quantity);
         _orderItems.Add(orderItem);
     }
 
     public void Remove(Guid productId)
     {
-        OrderItem orderItem = _orderItems.FirstOrDefault(x => x.ProductId == productId);
+        OrderItem? orderItem = _orderItems.FirstOrDefault(x => x.ProductId == productId);
 
         if (orderItem is null)
         {
-            throw new OrderItemNotFoundException(productId);
+            throw new DomainException(productId.ToString());
         }
         _orderItems.Remove(orderItem);
     }
