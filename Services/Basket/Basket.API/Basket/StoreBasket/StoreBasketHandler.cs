@@ -1,4 +1,5 @@
-﻿using static Discount.Grpc.DiscountProtoService;
+﻿
+using static Discount.Grpc.DiscountProtoService;
 
 namespace Basket.API.Basket.StoreBasket;
 
@@ -16,7 +17,7 @@ public class StoreBasketValidator : AbstractValidator<StoreBasketCommand>
     }
 }
 
-public class StoreBasketCommandHandler(IBasketRepository respository, DiscountProtoServiceClient discount)
+public class StoreBasketCommandHandler(IBasketRepository repository, DiscountProtoServiceClient discount)
     : ICommandHandler<StoreBasketCommand, StoreBasketResult>
 {
     public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
@@ -26,11 +27,8 @@ public class StoreBasketCommandHandler(IBasketRepository respository, DiscountPr
         await DeductDiscount(command.Cart, cancellationToken);
 
         //Store basket in database and update cache redis
-        var response = await respository.StoreBasket(command.Cart, cancellationToken);
+        var response = await repository.StoreBasket(command.Cart, cancellationToken);
 
-        //store basket in database
-
-        //update cache redis
 
         return new StoreBasketResult(command.Cart.UserName);
     }
