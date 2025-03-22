@@ -4,24 +4,21 @@ using Ordering.Application.Orders.Commands.DeleteOrder;
 namespace Ordering.API.Endpoints
 {
 
-    public record DeleteOrderRequest(Guid Id);
+    
     public record DeleteOrderResponse(bool IsSuccess);
-    //public class DeleteOrder : ICarterModule
-    //{
-    //    public void AddRoutes(IEndpointRouteBuilder app)
-    //    {
-    //        app.MapDelete("/order", async (DeleteOrderRequest request,ISender sender) => {
+    public class DeleteOrder : ICarterModule
+    {
+        public void AddRoutes(IEndpointRouteBuilder app)
+        {
+            app.MapDelete("/orders/{id}", async (Guid id,ISender sender) => {
 
+                var result = await sender.Send(new DeleteOrderCommand(id));
 
-    //            var command = request.Adapt<DeleteOrderCommand>();
+                var response = result.Adapt<DeleteOrderResponse>();
 
-    //            var result = await sender.Send(command);
+                return Results.Ok(response);
 
-    //            var response = result.Adapt<DeleteOrderResponse>();
-
-    //            return Results.Ok(response);
-
-    //        });
-    //    }
-    //}
+            });
+        }
+    }
 }

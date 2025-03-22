@@ -21,7 +21,7 @@ public class CreateOrderHandler(IApplicacionDbContext dbContext) : ICommandHandl
         var shippingAddress = Address.Of(orderDTO.ShippingAddress.FirstName, orderDTO.ShippingAddress.LastName, orderDTO.ShippingAddress.EmailAddress, orderDTO.ShippingAddress.Country);
         var billingAddress = Address.Of(orderDTO.BllingAddress.FirstName, orderDTO.BllingAddress.LastName, orderDTO.BllingAddress.EmailAddress, orderDTO.BllingAddress.Country);
 
-        var newOrder = Order.Create(Guid.NewGuid(), orderDTO.customerId, orderDTO.orderName, shippingAddress, billingAddress,
+        var newOrder = Order.Create(Guid.NewGuid(), orderDTO.CustomerId, orderDTO.orderName, shippingAddress, billingAddress,
             Payment.Of(orderDTO.Payment.CardNumber, orderDTO.Payment.CardHolderName, orderDTO.Payment.Expiration, orderDTO.Payment.Cvv));
 
         foreach (var item in orderDTO.OrderItems)

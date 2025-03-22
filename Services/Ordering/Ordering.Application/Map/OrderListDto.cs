@@ -11,7 +11,7 @@ public static class OrderListDto
         foreach (var item in order)
         {
             var orderDto = new OrderDTO(
-               Id: item.Id, customerId: item.customerId, orderName: item.OrderName,
+               Id: item.Id, CustomerId: item.customerId, orderName: item.OrderName,
                ShippingAddress: new AddressDTO(
                    item.ShippingAddress.FirstName,
                    item.ShippingAddress.LastName,

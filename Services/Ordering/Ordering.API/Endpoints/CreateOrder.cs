@@ -11,7 +11,7 @@ namespace Ordering.API.Endpoints
     {
         public void AddRoutes(IEndpointRouteBuilder app)
         {
-            app.MapPost("/order", async (CreateOrderRequest request, ISender sender) => {
+            app.MapPost("/orders", async (CreateOrderRequest request, ISender sender) => {
 
                 var command = request.Adapt<CreateOrderCommand>();
 
