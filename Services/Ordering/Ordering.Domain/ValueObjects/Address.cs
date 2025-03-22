@@ -3,10 +3,10 @@ namespace Ordering.Domain.ValueObjects
 {
     public  record Address
     {
-        public string FirstName { get; set; } = default!;
-        public string LastName { get; set; } = default!;
-        public string? EmailAddress { get; set; } = default!;
-        public string Country { get; set; } = default!;
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string? EmailAddress { get; set; } = string.Empty;
+        public string Country { get; set; } = string.Empty;
 
         protected Address()
         {

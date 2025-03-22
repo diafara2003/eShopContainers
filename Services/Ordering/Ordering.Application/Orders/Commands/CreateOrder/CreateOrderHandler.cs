@@ -34,7 +34,7 @@ public class CreateOrderHandler(IApplicacionDbContext dbContext) : ICommandHandl
 
         foreach (var item in orderDTO.OrderItems)
         {
-            newOrder.Add(item.ProductId, item.price, item.quantity);
+            newOrder.Add(item.ProductId, item.quantity,item.price);
         }
 
         return newOrder;

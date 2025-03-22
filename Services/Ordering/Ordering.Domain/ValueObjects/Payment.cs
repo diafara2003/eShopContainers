@@ -6,7 +6,7 @@ namespace Ordering.Domain.ValueObjects
         public string CardNumber { get; set; } = default!;
         public string CardName { get; set; } = default!;
         public string Expiration { get; set; } = default!;
-        public string Cvv { get; set; } = default!;
+        public string CVV { get; set; } = default!;
 
 
 
@@ -20,7 +20,7 @@ namespace Ordering.Domain.ValueObjects
             CardNumber = cardNumber;
             CardName = cardHolderName;
             Expiration = expiration;
-            Cvv = cvv;
+            CVV = cvv;
         }
 
         public static Payment Of(string cardNumber, string cardHolderName, string expiration, string cvv)

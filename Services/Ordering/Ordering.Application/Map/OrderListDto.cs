@@ -11,7 +11,7 @@ public static class OrderListDto
         foreach (var item in order)
         {
             var orderDto = new OrderDTO(
-               Id: item.Id, CustomerId: item.customerId, OrderName: item.OrderName,
+               Id: item.Id, CustomerId: item.CustomerId, OrderName: item.OrderName,
                ShippingAddress: new AddressDTO(
                    item.ShippingAddress.FirstName,
                    item.ShippingAddress.LastName,
@@ -26,7 +26,7 @@ public static class OrderListDto
                         item.Payment.CardNumber,
                         item.Payment.CardName,
                         item.Payment.Expiration,
-                        item.Payment.Cvv),
+                        item.Payment.CVV),
                     Status: item.Status,
                     OrderItems: item.OrderItems
                     .Select(i => new OrderItemDTO(ProductId: i.ProductId,

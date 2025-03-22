@@ -114,30 +114,22 @@ services:
       - "6062:8081"
 
 
-  # mongo-db:
-  #   container_name: ${MONGO_DB_NAME}
-  #   image: mongo
-  #   environment:
-  #     MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
-  #     MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
-  #   restart: always
-  #   command: ['--auth']
-
-  # mongo-express:
-  #   depends_on:
-  #     - mongo-db
-  #   image: mongo-express
-  #   restart: always
-  #   ports:
-  #     - "8081:8081"
-  #   environment:
-  #     ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}
-  #     ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
-  #     ME_CONFIG_MONGODB_SERVER: ${MONGO_DB_NAME}
-
-
+  ordering.api:
+    image: ordering.api
+    build:
+      context: .
+      dockerfile: Services/Ordering/Ordering.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=development
+      - ADPNETCORE_HTTPS_PORT=8080
+      - ASPNETCORE_HTTP_PORT=8081
+      - ConnectionStrings__Database=Server=order-db;Database=Orderdb;User Id=sa;Password=Jau12345*;Encrypt=False;TrustServerCertificate=True;            
+    ports:
+      - "6001:8080"
+      - "6061:8081"
 
 volumes:
   postgres_catalog:
   postgres_basket:
+
 

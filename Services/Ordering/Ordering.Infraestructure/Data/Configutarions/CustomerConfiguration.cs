@@ -1,5 +1,4 @@
 ﻿
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ordering.Domain.Models;
 
@@ -9,11 +8,16 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
 {
     public void Configure(EntityTypeBuilder<Customer> builder)
     {
-        builder.HasKey(x => x.Id);        
-        builder.Property(x => x.Id).ValueGeneratedNever();
-        builder.Property(x => x.Name).IsRequired().HasMaxLength(100);
-        builder.Property(x => x.Email).IsRequired().HasMaxLength(100);
+        builder.HasKey(c => c.Id);
+        builder.Property(c => c.Id).HasConversion(
+            customerId => customerId,
+            dbId => dbId);
 
+        builder.Property(c => c.Name).HasMaxLength(100).IsRequired();
+
+        builder.Property(c => c.Email).HasMaxLength(255);
+
+        builder.HasIndex(c => c.Email).IsUnique();
     }
 }
 

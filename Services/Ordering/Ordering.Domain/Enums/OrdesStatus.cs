@@ -1,7 +1,7 @@
 ﻿
 namespace Ordering.Domain.Enums
 {
-    public enum OrdesStatus
+    public enum OrderStatus
     {
         Draft=1,
         Pending=2,

@@ -10,5 +10,5 @@ public record OrderDTO(
     AddressDTO ShippingAddress, 
     AddressDTO BillingAddress,
     PaymentDTO Payment,
-    OrdesStatus Status,
+    OrderStatus Status,
     List<OrderItemDTO> OrderItems);

@@ -30,6 +30,6 @@ class UpdateOrderHandler(IApplicacionDbContext dbContext) :
         var updateBillingAddress = Address.Of(orderDto.BillingAddress.FirstName, orderDto.BillingAddress.LastName, orderDto.BillingAddress.EmailAddress, orderDto.BillingAddress.Country);
         var updatePayment = Payment.Of(orderDto.Payment.CardNumber, orderDto.Payment.CardName, orderDto.Payment.Expiration, orderDto.Payment.Cvv);
 
-        order.Update(order.Id, orderDto.CustomerId, orderDto.OrderName, updateShippingAddress, updateBillingAddress, updatePayment, orderDto.Status);
+        order.Update( orderDto.OrderName, updateShippingAddress, updateBillingAddress, updatePayment, orderDto.Status);
     }
 }

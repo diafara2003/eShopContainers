@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ordering.Application.Data;
 using Ordering.Infraestructure.Interceptors;
+using Ordering.Infrastructure.Data.Interceptors;
 
 
 

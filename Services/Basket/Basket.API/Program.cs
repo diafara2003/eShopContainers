@@ -2,11 +2,10 @@
 
 using BuildingBlocks.Behaviors;
 using BuildingBlocks.Exceptions;
+using Builingblock.Messaging.MassTransit;
 using Discount.Grpc;
 using HealthChecks.UI.Client;
 using JasperFx;
-using Microsoft.Extensions.DependencyInjection;
-using static Discount.Grpc.DiscountProtoService;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -58,6 +57,7 @@ builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(
 });
 ;
 
+builder.Services.AddMessageBroker(builder.Configuration);
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
