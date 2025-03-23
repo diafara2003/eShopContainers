@@ -1,5 +1,4 @@
-﻿using Ordering.Domain.Enums;
-
+﻿
 namespace Ordering.Domain.Models;
 public class Order : Aggregate<Guid>
 {

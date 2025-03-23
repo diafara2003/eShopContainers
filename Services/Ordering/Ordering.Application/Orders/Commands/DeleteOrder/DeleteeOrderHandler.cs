@@ -2,7 +2,7 @@
 
 namespace Ordering.Application.Orders.Commands.DeleteOrder
 {
-    public class DeleteeOrderHandler(IApplicacionDbContext dbContext)
+    public class DeleteeOrderHandler(IApplicationDbContext dbContext)
             : ICommandHandler<DeleteOrderCommand, DeleteOrderResult>
     {
         public async Task<DeleteOrderResult> Handle(DeleteOrderCommand command, CancellationToken cancellationToken)

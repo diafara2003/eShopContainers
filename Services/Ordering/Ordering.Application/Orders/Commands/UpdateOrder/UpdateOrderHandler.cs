@@ -1,7 +1,7 @@
 ﻿
 namespace Ordering.Application.Orders.Commands.UpdateOrder;
 
-class UpdateOrderHandler(IApplicacionDbContext dbContext) :
+class UpdateOrderHandler(IApplicationDbContext dbContext) :
     ICommandHandler<UpdateOrderCommand, UpdateOrderResult>
 {
     public async Task<UpdateOrderResult> Handle(UpdateOrderCommand command, 
@@ -26,9 +26,9 @@ class UpdateOrderHandler(IApplicacionDbContext dbContext) :
 
     private void UpdateOrderWithNewValues(Order order,OrderDTO orderDto)
     {
-        var updateShippingAddress = Address.Of(orderDto.ShippingAddress.FirstName, orderDto.ShippingAddress.LastName, orderDto.ShippingAddress.EmailAddress, orderDto.ShippingAddress.Country);
-        var updateBillingAddress = Address.Of(orderDto.BillingAddress.FirstName, orderDto.BillingAddress.LastName, orderDto.BillingAddress.EmailAddress, orderDto.BillingAddress.Country);
-        var updatePayment = Payment.Of(orderDto.Payment.CardNumber, orderDto.Payment.CardName, orderDto.Payment.Expiration, orderDto.Payment.Cvv);
+        var updateShippingAddress = Address.Of(orderDto.ShippingAddress.FirstName, orderDto.ShippingAddress.LastName, orderDto.ShippingAddress.EmailAddress, orderDto.ShippingAddress.AddressLine, orderDto.ShippingAddress.Country, orderDto.ShippingAddress.State, orderDto.ShippingAddress.ZipCode);
+        var updateBillingAddress = Address.Of(orderDto.BillingAddress.FirstName, orderDto.BillingAddress.LastName, orderDto.BillingAddress.EmailAddress, orderDto.BillingAddress.AddressLine, orderDto.BillingAddress.Country, orderDto.BillingAddress.State, orderDto.BillingAddress.ZipCode);
+        var updatePayment = Payment.Of(orderDto.Payment.CardNumber, orderDto.Payment.CardName, orderDto.Payment.Expiration, orderDto.Payment.Cvv,order.Payment.PaymentMethod);
 
         order.Update( orderDto.OrderName, updateShippingAddress, updateBillingAddress, updatePayment, orderDto.Status);
     }

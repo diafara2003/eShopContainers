@@ -1,24 +1,21 @@
-﻿
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ordering.Domain.Models;
 
-namespace Ordering.Infraestructure.Data.Configutarions;
-
-public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
+namespace Ordering.Infraestructure.Data.Configutarions
 {
-    public void Configure(EntityTypeBuilder<Customer> builder)
+    public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
     {
-        builder.HasKey(c => c.Id);
-        builder.Property(c => c.Id).HasConversion(
-            customerId => customerId,
-            dbId => dbId);
+        public void Configure(EntityTypeBuilder<Customer> builder)
+        {
+            builder.HasKey(c => c.Id);
+            builder.Property(c => c.Id).HasConversion(
+                customerId => customerId,
+                dbId => dbId);
 
-        builder.Property(c => c.Name).HasMaxLength(100).IsRequired();
-
-        builder.Property(c => c.Email).HasMaxLength(255);
-
-        builder.HasIndex(c => c.Email).IsUnique();
+            builder.Property(c => c.Name).HasMaxLength(100).IsRequired();
+            builder.Property(c => c.Email).HasMaxLength(255);
+            builder.HasIndex(c => c.Email).IsUnique();
+        }
     }
 }
-
-

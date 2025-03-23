@@ -3,17 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Ordering.Infraestructure.Data;
+using Ordering.Infrastructure.Data;
 
 #nullable disable
 
 namespace Ordering.Infraestructure.Data.Migrations
 {
-    [DbContext(typeof(ApplicaionDbContext))]
-    partial class ApplicaionDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20250323045501_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,6 +182,11 @@ namespace Ordering.Infraestructure.Data.Migrations
                             b1.Property<Guid>("OrderId")
                                 .HasColumnType("uniqueidentifier");
 
+                            b1.Property<string>("AddressLine")
+                                .IsRequired()
+                                .HasMaxLength(180)
+                                .HasColumnType("nvarchar(180)");
+
                             b1.Property<string>("Country")
                                 .IsRequired()
                                 .HasMaxLength(50)
@@ -197,6 +205,16 @@ namespace Ordering.Infraestructure.Data.Migrations
                                 .IsRequired()
                                 .HasMaxLength(50)
                                 .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("State")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("ZipCode")
+                                .IsRequired()
+                                .HasMaxLength(5)
+                                .HasColumnType("nvarchar(5)");
 
                             b1.HasKey("OrderId");
 
@@ -211,6 +229,11 @@ namespace Ordering.Infraestructure.Data.Migrations
                             b1.Property<Guid>("OrderId")
                                 .HasColumnType("uniqueidentifier");
 
+                            b1.Property<string>("AddressLine")
+                                .IsRequired()
+                                .HasMaxLength(180)
+                                .HasColumnType("nvarchar(180)");
+
                             b1.Property<string>("Country")
                                 .IsRequired()
                                 .HasMaxLength(50)
@@ -229,6 +252,16 @@ namespace Ordering.Infraestructure.Data.Migrations
                                 .IsRequired()
                                 .HasMaxLength(50)
                                 .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("State")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("ZipCode")
+                                .IsRequired()
+                                .HasMaxLength(5)
+                                .HasColumnType("nvarchar(5)");
 
                             b1.HasKey("OrderId");
 
@@ -249,7 +282,6 @@ namespace Ordering.Infraestructure.Data.Migrations
                                 .HasColumnType("nvarchar(3)");
 
                             b1.Property<string>("CardName")
-                                .IsRequired()
                                 .HasMaxLength(50)
                                 .HasColumnType("nvarchar(50)");
 
@@ -263,9 +295,12 @@ namespace Ordering.Infraestructure.Data.Migrations
                                 .HasMaxLength(10)
                                 .HasColumnType("nvarchar(10)");
 
+                            b1.Property<int>("PaymentMethod")
+                                .HasColumnType("int");
+
                             b1.HasKey("OrderId");
 
-                            b1.ToTable("Payments");
+                            b1.ToTable("Orders");
 
                             b1.WithOwner()
                                 .HasForeignKey("OrderId");

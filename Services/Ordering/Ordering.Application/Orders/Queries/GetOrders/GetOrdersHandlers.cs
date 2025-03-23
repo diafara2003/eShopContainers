@@ -1,7 +1,7 @@
 ﻿
 namespace Ordering.Application.Orders.Queries.GetOrders
 {
-    public class GetOrdersHandlers(IApplicacionDbContext dbContext)
+    public class GetOrdersHandlers(IApplicationDbContext dbContext)
         : IQueryHandler<GetOrdersQuery, GetOrdersresult>
     {
 

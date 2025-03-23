@@ -12,6 +12,21 @@ services:
     ports:
       - "1433:1433"
 
+  messagebroker:
+    container_name: messagebroker
+    image: rabbitmq:management    
+    hostname: ecomerce-mq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ./rabbitmq/data:/var/lib/rabbitmq
+      - ./rabbitmq/logs:/var/log/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
   catalog-db:
     container_name: catalog-db
     image: postgres:latest
@@ -93,9 +108,12 @@ services:
       - ConnectionStrings__DataBase=Server=basket-db;Port=5432;Database=BasketDB;User Id=postgres;Password=postgres;Include Error Detail=true;      
       - ConnectionStrings__Redis=redis_basket:6379
       - GrpcSettings=https://discount.grpc:8081
+      - MessageBroker__Host=amqp://ecommerce-mq:5672
+      - MessageBroker__UserName=guest
+      - MessageBroker__Password=guest
     ports:
-      - "6001:8080"
-      - "6061:8081"
+      - "6080:8080"
+      - "6081:8081"
 
 
   discount.grpc:
@@ -114,8 +132,11 @@ services:
       - "6062:8081"
 
 
-  ordering.api:
-    image: ordering.api
+  ordering-api:
+    image: ordering-api
+    depends_on:
+      - order-db
+      - messagebroker
     build:
       context: .
       dockerfile: Services/Ordering/Ordering.API/Dockerfile
@@ -124,6 +145,10 @@ services:
       - ADPNETCORE_HTTPS_PORT=8080
       - ASPNETCORE_HTTP_PORT=8081
       - ConnectionStrings__Database=Server=order-db;Database=Orderdb;User Id=sa;Password=Jau12345*;Encrypt=False;TrustServerCertificate=True;            
+      - MessageBroker__Host=amqp://ecommerce-mq:5672
+      - MessageBroker__UserName=guest
+      - MessageBroker__Password=guest
+      - FeatureManagement__OrderFullfilment=true
     ports:
       - "6001:8080"
       - "6061:8081"

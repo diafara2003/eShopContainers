@@ -1,34 +1,32 @@
-﻿
-namespace Ordering.Domain.ValueObjects
+﻿namespace Ordering.Domain.ValueObjects;
+public record Payment
 {
-    public record Payment
+    public string? CardName { get; } = default!;
+    public string CardNumber { get; } = default!;
+    public string Expiration { get; } = default!;
+    public string CVV { get; } = default!;
+    public int PaymentMethod { get; } = default!;
+
+    protected Payment()
     {
-        public string CardNumber { get; set; } = default!;
-        public string CardName { get; set; } = default!;
-        public string Expiration { get; set; } = default!;
-        public string CVV { get; set; } = default!;
+    }
 
+    private Payment(string cardName, string cardNumber, string expiration, string cvv, int paymentMethod)
+    {
+        CardName = cardName;
+        CardNumber = cardNumber;
+        Expiration = expiration;
+        CVV = cvv;
+        PaymentMethod = paymentMethod;
+    }
 
+    public static Payment Of(string cardName, string cardNumber, string expiration, string cvv, int paymentMethod)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(cardName);
+        ArgumentException.ThrowIfNullOrWhiteSpace(cardNumber);
+        ArgumentException.ThrowIfNullOrWhiteSpace(cvv);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(cvv.Length, 3);
 
-        protected Payment()
-        {
-
-        }
-
-        private Payment(string cardNumber, string cardHolderName, string expiration, string cvv)
-        {
-            CardNumber = cardNumber;
-            CardName = cardHolderName;
-            Expiration = expiration;
-            CVV = cvv;
-        }
-
-        public static Payment Of(string cardNumber, string cardHolderName, string expiration, string cvv)
-        {
-            ArgumentException.ThrowIfNullOrWhiteSpace(cardNumber);            
-            ArgumentException.ThrowIfNullOrWhiteSpace(expiration);
-            
-            return new Payment(cardNumber, cardHolderName, expiration, cvv);
-        }
+        return new Payment(cardName, cardNumber, expiration, cvv, paymentMethod);
     }
 }

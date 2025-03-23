@@ -14,6 +14,20 @@ public class DispachDomainEventsInterceptor : SaveChangesInterceptor
         _mediator = mediator;
     }
 
+    public override ValueTask<int> SavedChangesAsync(SaveChangesCompletedEventData eventData, int result, CancellationToken cancellationToken = default)
+    {
+        
+
+        var trackedEntities = eventData.Context.ChangeTracker.Entries()
+    .Select(e => new
+    {
+        EntityType = e.Entity.GetType().Name,
+        State = e.State.ToString()
+    })
+    .ToList();
+        return base.SavedChangesAsync(eventData, result, cancellationToken);
+    }
+
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
     {
         DispachDomainEvents(eventData.Context).GetAwaiter().GetResult();

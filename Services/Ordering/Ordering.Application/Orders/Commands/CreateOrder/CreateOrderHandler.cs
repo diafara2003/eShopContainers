@@ -1,42 +1,42 @@
-﻿
-namespace Ordering.Application.Orders.Commands.CreateOrder;
+﻿using Ordering.Application.Dtos;
+using Ordering.Domain.Models;
 
-public class CreateOrderHandler(IApplicacionDbContext dbContext) : ICommandHandler<CreateOrderCommand, CreateOrderResult>
+namespace Ordering.Application.Orders.Commands.CreateOrder;
+public class CreateOrderHandler(IApplicationDbContext dbContext)
+    : ICommandHandler<CreateOrderCommand, CreateOrderResult>
 {
-    public async Task<CreateOrderResult> Handle
-        (CreateOrderCommand command, CancellationToken cancellationToken)
+    public async Task<CreateOrderResult> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
     {
+        //create Order entity from command object
+        //save to database
+        //return result 
 
         var order = CreateNewOrder(command.Order);
 
         dbContext.Orders.Add(order);
-
         await dbContext.SaveChangesAsync(cancellationToken);
 
-
-        var idOrden = order.Id;
-
-        foreach (var item in order.OrderItems)
-        {
-            dbContext.OrderItems.Add(item );
-        }
-        await dbContext.SaveChangesAsync(cancellationToken);
         return new CreateOrderResult(order.Id);
     }
 
-    private Order CreateNewOrder(OrderDTO orderDTO)
+    private Order CreateNewOrder(OrderDTO orderDto)
     {
-        var shippingAddress = Address.Of(orderDTO.ShippingAddress.FirstName, orderDTO.ShippingAddress.LastName, orderDTO.ShippingAddress.EmailAddress, orderDTO.ShippingAddress.Country);
-        var billingAddress = Address.Of(orderDTO.BillingAddress.FirstName, orderDTO.BillingAddress.LastName, orderDTO.BillingAddress.EmailAddress, orderDTO.BillingAddress.Country);
+        var shippingAddress = Address.Of(orderDto.ShippingAddress.FirstName, orderDto.ShippingAddress.LastName, orderDto.ShippingAddress.EmailAddress, orderDto.ShippingAddress.AddressLine, orderDto.ShippingAddress.Country, orderDto.ShippingAddress.State, orderDto.ShippingAddress.ZipCode);
+        var billingAddress = Address.Of(orderDto.BillingAddress.FirstName, orderDto.BillingAddress.LastName, orderDto.BillingAddress.EmailAddress, orderDto.BillingAddress.AddressLine, orderDto.BillingAddress.Country, orderDto.BillingAddress.State, orderDto.BillingAddress.ZipCode);
 
-        var newOrder = Order.Create(Guid.NewGuid(), orderDTO.CustomerId, orderDTO.OrderName, shippingAddress, billingAddress,
-            Payment.Of(orderDTO.Payment.CardNumber, orderDTO.Payment.CardName, orderDTO.Payment.Expiration, orderDTO.Payment.Cvv));
+        var newOrder = Order.Create(
+                id: Guid.NewGuid(),
+                customerId: orderDto.CustomerId ,
+                orderName: orderDto.OrderName,
+                shippingAddress: shippingAddress,
+                billingAddress: billingAddress,
+                payment: Payment.Of(orderDto.Payment.CardName, orderDto.Payment.CardNumber, orderDto.Payment.Expiration, orderDto.Payment.Cvv, orderDto.Payment.PaymentMethod)
+                );
 
-        foreach (var item in orderDTO.OrderItems)
+        foreach (var orderItemDto in orderDto.OrderItems)
         {
-            newOrder.Add(item.ProductId, item.quantity,item.price);
+            newOrder.Add(orderItemDto.ProductId, orderItemDto.quantity, orderItemDto.price );
         }
-
         return newOrder;
     }
 }

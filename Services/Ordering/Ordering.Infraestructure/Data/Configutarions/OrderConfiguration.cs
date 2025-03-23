@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ordering.Domain.Enums;
 
+
 namespace Ordering.Infraestructure.Data.Configutarions;
 
 public class OrderConfiguration : IEntityTypeConfiguration<Order>
@@ -22,14 +23,14 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
             .WithOne()
             .HasForeignKey(oi => oi.Id);
 
-     
+       
 
         builder.OwnsOne(
            o => o.ShippingAddress, addressBuilder =>
            {
                addressBuilder.Property(a => a.FirstName)
-                 .HasMaxLength(50)
-                 .IsRequired();
+                   .HasMaxLength(50)
+                   .IsRequired();
 
                addressBuilder.Property(a => a.LastName)
                     .HasMaxLength(50)
@@ -38,20 +39,27 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
                addressBuilder.Property(a => a.EmailAddress)
                    .HasMaxLength(50);
 
-           
+               addressBuilder.Property(a => a.AddressLine)
+                   .HasMaxLength(180)
+                   .IsRequired();
 
                addressBuilder.Property(a => a.Country)
                    .HasMaxLength(50);
 
-             
+               addressBuilder.Property(a => a.State)
+                   .HasMaxLength(50);
+
+               addressBuilder.Property(a => a.ZipCode)
+                   .HasMaxLength(5)
+                   .IsRequired();
            });
 
         builder.OwnsOne(
           o => o.BillingAddress, addressBuilder =>
           {
               addressBuilder.Property(a => a.FirstName)
-                 .HasMaxLength(50)
-                 .IsRequired();
+                   .HasMaxLength(50)
+                   .IsRequired();
 
               addressBuilder.Property(a => a.LastName)
                    .HasMaxLength(50)
@@ -60,10 +68,19 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
               addressBuilder.Property(a => a.EmailAddress)
                   .HasMaxLength(50);
 
-
+              addressBuilder.Property(a => a.AddressLine)
+                  .HasMaxLength(180)
+                  .IsRequired();
 
               addressBuilder.Property(a => a.Country)
                   .HasMaxLength(50);
+
+              addressBuilder.Property(a => a.State)
+                  .HasMaxLength(50);
+
+              addressBuilder.Property(a => a.ZipCode)
+                  .HasMaxLength(5)
+                  .IsRequired();
           });
 
         builder.OwnsOne(
@@ -82,7 +99,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
                    paymentBuilder.Property(p => p.CVV)
                        .HasMaxLength(3);
 
-                
+                   paymentBuilder.Property(p => p.PaymentMethod);
                });
 
         builder.Property(o => o.Status)

@@ -1,7 +1,5 @@
 ﻿
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore;
-using Ordering.Domain.Models;
 
 namespace Ordering.Infraestructure.Data.Configutarions;
 
